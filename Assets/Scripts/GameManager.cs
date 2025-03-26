@@ -28,23 +28,17 @@ public class GameManager : MonoBehaviour
     private string saveFile;
 
     private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        
-
+    {   
         saveFile = Path.Combine(Application.persistentDataPath, "userData.json");
 
-        uiManager = GameObject.FindWithTag("UIManager").GetComponent<UIManager>();
 
         LoadUserData();
     }
     private void Start()
     {
-        if(uiManager != null && userData != null)
+        uiManager = GameObject.FindWithTag("UIManager").GetComponent<UIManager>();
+
+        if (uiManager != null && userData != null)
         {
             uiManager.AddBank(userData.bankBalance);
             uiManager.AddCash(userData.handCash);
@@ -70,11 +64,6 @@ public class GameManager : MonoBehaviour
             Debug.Log("저장된 데이터 없음");
             userData = new UserData("김규태", 0, 0);
             SaveUserData();
-        }
-        if (uiManager != null)
-        {
-            uiManager.AddBank(userData.bankBalance);
-            uiManager.AddCash(userData.handCash);
         }
     }
 
