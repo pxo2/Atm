@@ -34,11 +34,7 @@ public class GameManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+        
 
         saveFile = Path.Combine(Application.persistentDataPath, "userData.json");
 
@@ -48,7 +44,7 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        if(uiManager != null)
+        if(uiManager != null && userData != null)
         {
             uiManager.AddBank(userData.bankBalance);
             uiManager.AddCash(userData.handCash);
@@ -58,7 +54,7 @@ public class GameManager : MonoBehaviour
     {
         string jsonData = JsonUtility.ToJson(userData, true);
         File.WriteAllText(saveFile, jsonData);
-        Debug.Log("µ¥ÀÌÅÍ ÀúÀå ¿Ï·á: " + saveFile);
+        Debug.Log("ë°ì´í„° ì €ì¥ ì™„ë£Œ: " + saveFile);
     }
 
     public void LoadUserData()
@@ -67,12 +63,12 @@ public class GameManager : MonoBehaviour
         {
             string jsonData = File.ReadAllText(saveFile);
             userData = JsonUtility.FromJson<UserData>(jsonData);
-            Debug.Log("µ¥ÀÌÅÍ ·Îµå ¿Ï·á");
+            Debug.Log("ë°ì´í„° ë¡œë“œ ì™„ë£Œ");
         }
         else
         {
-            Debug.Log("ÀúÀåµÈ µ¥ÀÌÅÍ ¾øÀ½, ±âº»°ª ¼³Á¤");
-            userData = new UserData("±è±ÔÅÂ", 85000, 200000);
+            Debug.Log("ì €ì¥ëœ ë°ì´í„° ì—†ìŒ");
+            userData = new UserData("ê¹€ê·œíƒœ", 0, 0);
             SaveUserData();
         }
         if (uiManager != null)
@@ -83,19 +79,18 @@ public class GameManager : MonoBehaviour
     }
 
     public void AddHandCash(float amount)
-    {
+    { /* ê¸°ì¡´ curCashì™€ curBankBalance ê°™ì€ ê°’ì„ ì´ˆê¸°í™” í•œí›„ ì‚¬ìš©í–ˆì§€ë§Œ ë°ì´í„° ì €ì¥ì„ ìœ„í•´
+       ë°”ë¡œ userData ì— ì €ì¥ì„ í•œë‹¤ */
         userData.handCash += amount;
         uiManager.AddCash(userData.handCash);
         SaveUserData();
-        Debug.Log("¼ÒÁö±İ º¯°æ: " + userData.handCash);
+        Debug.Log("ì†Œì§€ê¸ˆ ë³€ê²½: " + userData.handCash);
     }
     public void Addbank(float amount)
     {
         userData.bankBalance += amount;
         uiManager.AddBank(userData.bankBalance);
         SaveUserData();
-        Debug.Log("ÀºÇà ÀÜ¾× º¯°æ: " + userData.bankBalance);
+        Debug.Log("ì€í–‰ ì”ì•¡ ë³€ê²½: " + userData.bankBalance);
     }
-
-
 }
